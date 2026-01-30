@@ -27,3 +27,12 @@ dist-ssr
 venv/
 .env
 .env.*
+<<<<<<< HEAD
+=======
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+>>>>>>> parent of 0e896bb (Revert "login form")

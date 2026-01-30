@@ -11,7 +11,11 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+<<<<<<< HEAD
           <Route path="/" element={<LoginPage />} />
+=======
+          <Route path="/login" element={<LoginPage />} />
+>>>>>>> parent of 0e896bb (Revert "login form")
           <Route
             path="/cashier"
             element={
