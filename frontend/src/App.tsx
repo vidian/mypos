@@ -1,12 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProtectedRoute from "@/routes/ProtectedRoute";
-
-import LoginPage from "@/auth/login-form";
-import Master from "@/pages/master";
-import Cashier from "@/pages/cashier";
-import Admin from "@/pages/cashier";
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
+  const [count, setCount] = useState(0);
+
   return (
     <>
       <BrowserRouter>
