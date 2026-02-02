@@ -9,9 +9,8 @@ export default function ProtectedRoute({ children, allow }: Props) {
   const token = localStorage.getItem("access");
   const role = localStorage.getItem("role");
 
-  if (!token) return <Navigate to="/login" />;
-  if (!role || !allow.includes(role as any))
-    return <Navigate to="/login" />;
+  if (!token) return <Navigate to="/" />;
+  if (!role || !allow.includes(role as any)) return <Navigate to="/" />;
 
   return children;
 }

@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 load_dotenv()
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -100,6 +101,9 @@ DATABASES = {
 
 SIMPLE_JWT = {
     'TOKEN_OBTAIN_SERIALIZER': 'mypos_app.serializers.LoginSerializer',
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=6),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 REST_FRAMEWORK = {
