@@ -2,45 +2,26 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
 import LoginPage from "@/auth/login-form";
-import Master from "@/pages/master";
-import Cashier from "@/pages/cashier";
-import Admin from "@/pages/cashier";
+import { routes } from "@/routes/routes";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        {routes.map((r) => (
           <Route
-            path="/cashier"
+            key={r.path}
+            path={r.path}
             element={
-              <ProtectedRoute allow={["cashier", "admin", "master"]}>
-                <Cashier />
+              <ProtectedRoute allow={r.allow}>
+                {r.element}
               </ProtectedRoute>
             }
           />
-
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute allow={["admin", "master"]}>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/master"
-            element={
-              <ProtectedRoute allow={["master"]}>
-                <Master />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </>
+        ))}
+      </Routes>
+    </BrowserRouter>
   );
 }
 

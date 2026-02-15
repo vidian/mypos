@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "@/api/auth";
+import { saveSession } from "@/auth/session";
 
 export default function LoginForm({
   className,
@@ -16,21 +17,28 @@ export default function LoginForm({
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      const data = await login(form);
+      saveSession({ access: data.access, refresh: data.refresh, role: data.role });
 
-    const data = await login(form);
-
-    localStorage.setItem("access", data.access);
-    localStorage.setItem("refresh", data.refresh);
-    localStorage.setItem("role", data.role);
-
-    if (data.role === "master") {
-      navigate("/master");
-    } else if (data.role === "admin") {
-      navigate("/admin");
-    } else if (data.role === "cashier") {
-      navigate("/cashier");
+      if (data.role === "master") {
+        navigate("/master");
+      } else if (data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/cashier");
+      }
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,7 +48,7 @@ export default function LoginForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
           <Card className="overflow-hidden p-0">
             <CardContent className="grid p-0 md:grid-cols-2">
-              <form className="p-6 md:p-8">
+              <form className="p-6 md:p-8" onSubmit={handleSubmit}>
                 <FieldGroup>
                   <div className="flex flex-col items-center gap-2 text-center">
                     <h1 className="text-2xl font-bold">ZAKI POS</h1>
@@ -75,10 +83,13 @@ export default function LoginForm({
                     />
                   </Field>
                   <Field>
-                    <Button type="submit" onClick={handleSubmit}>
-                      Login
+                    <Button type="submit" disabled={loading}>
+                      {loading ? "Logging in..." : "Login"}
                     </Button>
                   </Field>
+                  {error && (
+                    <div className="text-destructive text-sm mt-2">{error}</div>
+                  )}
                 </FieldGroup>
               </form>
               <div className="bg-muted relative hidden md:block">

@@ -1,17 +1,18 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
+import type { Role } from "@/auth/session";
+import { isLoggedIn, getRole } from "@/auth/session";
 
 interface Props {
-  children: JSX.Element;
-  allow: Array<"master" | "admin" | "cashier">;
+  children: React.ReactElement;
+  allow: Role[];
 }
 
 export default function ProtectedRoute({ children, allow }: Props) {
-  const token = localStorage.getItem("access");
-  const role = localStorage.getItem("role");
+  if (!isLoggedIn()) return <Navigate to="/login" />;
 
-  if (!token) return <Navigate to="/login" />;
-  if (!role || !allow.includes(role as any))
-    return <Navigate to="/login" />;
+  const role = getRole();
+  if (!role || !allow.includes(role)) return <Navigate to="/login" />;
 
   return children;
 }
